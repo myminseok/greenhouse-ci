@@ -43,7 +43,7 @@ resources:
     regexp: agent-dependencies-v(.*).zip
     access_key_id: {{AWS_ACCESS_KEY}}
     secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw
+- name: winsw2
   type: git
   source:
     branch: master
@@ -91,12 +91,13 @@ jobs:
   plan:
   - aggregate:
     - get: ci
-    - get: winsw
+    - get: winsw2
       trigger: true
     # - put: version
     #   resource: winsw-version
     #   params: { bump: minor }
   - task: build-winsw
+    input_mapping: {winsw2: winsw}
     file: ci/tasks/build-winsw.yml
   - put: winsw-exe
     params: { file: winsw-output/winsw-*.exe }
