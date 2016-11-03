@@ -49,13 +49,13 @@ resources:
     branch: master
     uri: https://github.com/kohsuke/winsw.git
     tag_filter: winsw-*
-# - name: winsw-version
-#   type: semver
-#   source:
-#     bucket: bosh-windows-winsw
-#     key: version/number
-#     access_key_id: {{AWS_ACCESS_KEY}}
-#     secret_access_key: {{AWS_SECRET_KEY}}
+- name: winsw-version
+  type: semver
+  source:
+    bucket: bosh-windows-winsw
+    key: version/number
+    access_key_id: {{AWS_ACCESS_KEY}}
+    secret_access_key: {{AWS_SECRET_KEY}}
 - name: winsw-exe
   type: s3
   source:
@@ -93,9 +93,9 @@ jobs:
     - get: ci
     - get: winsw2
       trigger: true
-    # - put: version
-    #   resource: winsw-version
-    #   params: { bump: minor }
+    - put: version
+      resource: winsw-version
+      params: { bump: minor }
   - task: build-winsw
     file: ci/tasks/build-winsw.yml
   - put: winsw-exe
