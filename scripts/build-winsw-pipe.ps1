@@ -21,8 +21,4 @@ if ((Get-Command "go.exe" -ErrorAction SilentlyContinue) -eq $null)
   Write-Host "Go is installed!"
 }
 
-
-cd $env:GOPATH/src/github.com/cloudfoundry/bosh-agent/jobsupervisor/pipe/
-ginkgo.exe
-cd -
 go.exe build -o winsw-pipe-output/winsw-pipe-$version.exe $env:GOPATH/src/github.com/cloudfoundry/bosh-agent/jobsupervisor/pipe/main.go
