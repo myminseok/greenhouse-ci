@@ -2,7 +2,7 @@
 platform: windows
 
 inputs:
-- name: winsw2
+- name: win-sw2
 - name: version
 - name: ci
 

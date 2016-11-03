@@ -43,7 +43,7 @@ resources:
     regexp: agent-dependencies-v(.*).zip
     access_key_id: {{AWS_ACCESS_KEY}}
     secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw2
+- name: win-sw
   type: git
   source:
     branch: master
@@ -91,7 +91,7 @@ jobs:
   plan:
   - aggregate:
     - get: ci
-    - get: winsw2
+    - get: win-sw
       trigger: true
     - put: version
       resource: winsw-version
