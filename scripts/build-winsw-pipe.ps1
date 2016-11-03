@@ -6,7 +6,6 @@ trap {
 $env:GOPATH = Join-Path -Path $PWD "gopath"
 $env:PATH = $env:GOPATH + "/bin;C:/go/bin;" + $env:PATH
 
-
 if ((Get-Command "go.exe" -ErrorAction SilentlyContinue) -eq $null)
 {
   Write-Host "Installing Go 1.7.3!"
@@ -21,4 +20,5 @@ if ((Get-Command "go.exe" -ErrorAction SilentlyContinue) -eq $null)
   Write-Host "Go is installed!"
 }
 
+$version = $(cat ../version/number)
 go.exe build -o winsw-pipe-output/winsw-pipe-$version.exe $env:GOPATH/src/github.com/cloudfoundry/bosh-agent/jobsupervisor/pipe/main.go
