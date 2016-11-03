@@ -3,7 +3,7 @@ resources:
 - name: ci
   type: git
   source:
-    branch: windows-syslog
+    branch: master
     uri: https://github.com/cloudfoundry-incubator/greenhouse-ci.git
 - name: version
   type: semver
@@ -43,32 +43,7 @@ resources:
     regexp: agent-dependencies-v(.*).zip
     access_key_id: {{AWS_ACCESS_KEY}}
     secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw-upstream
-  type: git
-  source:
-    branch: master
-    uri: https://github.com/kohsuke/winsw.git
-    tag_filter: winsw-*
-- name: winsw-version
-  type: semver
-  source:
-    bucket: bosh-windows-winsw
-    key: version/number
-    access_key_id: {{AWS_ACCESS_KEY}}
-    secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:pivotal-cf/winsw.git
-    private_key: {{PIVOTALCF_WINSW_DEPLOY_KEY}}
-- name: winsw-exe
-  type: s3
-  source:
-    bucket: bosh-windows-winsw
-    regexp: winsw-(.*).exe
-    access_key_id: {{AWS_ACCESS_KEY}}
-    secret_access_key: {{AWS_SECRET_KEY}}
+
 - name: winsw-pipe-version
   type: semver
   source:
@@ -92,36 +67,6 @@ resources:
     secret_access_key: {{AWS_SECRET_KEY}}
 
 jobs:
-- name: merge-winsw-upstream
-  serial: true
-  plan:
-  - aggregate:
-    - get: ci
-    - get: from-repo
-      resource: winsw-upstream
-      trigger: true
-    - get: to-repo
-      resource: winsw
-  - task: merge-winsw-upstream
-    file: ci/tasks/merge-repo.yml
-    params:
-      FROM_BRANCH: master
-  - put: winsw
-    params: { repository: merged-repo/to-repo }
-- name: build-winsw
-  serial: true
-  plan:
-  - aggregate:
-    - get: ci
-    - get: winsw
-      trigger: true
-    - put: version
-      resource: winsw-version
-      params: { bump: minor }
-  - task: build-winsw
-    file: ci/tasks/build-winsw.yml
-  - put: winsw-exe
-    params: { file: winsw-output/winsw-*.exe }
 - name: build-winsw-pipe
   serial: true
   plan:
@@ -144,8 +89,6 @@ jobs:
         bump: major
     - get: bosh-blobstore-dav
     - get: bosh-blobstore-s3
-    - get: winsw-exe
-      passed: [build-winsw]
     - get: winsw-pipe-exe
       passed: [build-winsw-pipe]
     - get: tar

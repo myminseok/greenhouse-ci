@@ -3,11 +3,12 @@ platform: windows
 
 inputs:
 - name: version
-- name: winsw
+- name: winsw-pipe
+  path: gopath/src/github.com/pivotal-cf-experimental/winsw-pipe
 - name: ci
 
 outputs:
-- name: winsw-output
+- name: winsw-pipe-output
 
 run:
   path: powershell
@@ -15,4 +16,4 @@ run:
   - "-ExecutionPolicy"
   - "Bypass"
   - "-File"
-  - ci/scripts/build-winsw.ps1
+  - ci/scripts/build-winsw-pipe.ps1
