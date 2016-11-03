@@ -4,7 +4,7 @@ platform: windows
 inputs:
 - name: version
 - name: winsw-pipe
-  path: gopath/src/github.com/pivotal-cf-experimental/winsw-pipe
+  path: gopath/src/github.com/cloudfoundry/bosh-agent
 - name: ci
 
 outputs:
