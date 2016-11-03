@@ -130,6 +130,7 @@ jobs:
     - put: version
       resource: winsw-pipe-version
       params: { bump: minor }
+    - get: winsw-pipe
   - task: build-winsw-pipe
     file: ci/tasks/build-winsw-pipe.yml
   - put: winsw-pipe-exe
