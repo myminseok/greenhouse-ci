@@ -63,27 +63,6 @@ resources:
     regexp: winsw-(.*).exe
     access_key_id: {{AWS_ACCESS_KEY}}
     secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw-pipe-version
-  type: semver
-  source:
-    bucket: winsw-pipe
-    key: version/number
-    access_key_id: {{AWS_ACCESS_KEY}}
-    secret_access_key: {{AWS_SECRET_KEY}}
-- name: winsw-pipe
-  type: git
-  source:
-    branch: windows-syslog
-    uri: https://github.com/cloudfoundry/bosh-agent
-    paths:
-    - jobsupervisor/pipe
-- name: winsw-pipe-exe
-  type: s3
-  source:
-    bucket: winsw-pipe
-    regexp: winsw-pipe-(.*).exe
-    access_key_id: {{AWS_ACCESS_KEY}}
-    secret_access_key: {{AWS_SECRET_KEY}}
 
 jobs:
 - name: build-winsw
@@ -100,20 +79,6 @@ jobs:
     file: ci/tasks/build-winsw.yml
   - put: winsw-exe
     params: { file: winsw-output/winsw-*.exe }
-- name: build-winsw-pipe
-  serial: true
-  plan:
-  - aggregate:
-    - get: ci
-    - put: version
-      resource: winsw-pipe-version
-      params: { bump: minor }
-    - get: winsw-pipe
-      trigger: true
-  - task: build-winsw-pipe
-    file: ci/tasks/build-winsw-pipe.yml
-  - put: winsw-pipe-exe
-    params: { file: winsw-pipe-output/winsw-pipe-*.exe }
 - name: collect-and-zip
   serial: true
   plan:
@@ -126,9 +91,6 @@ jobs:
     - get: bosh-blobstore-s3
     - get: winsw-exe
       passed: [build-winsw]
-      trigger: true
-    - get: winsw-pipe-exe
-      passed: [build-winsw-pipe]
       trigger: true
     - get: tar
     - get: zlib1
