@@ -4,6 +4,8 @@ image_resource:
   type: docker-image
   source:
     repository: ruby
+    tag : '2.2'
+
 inputs:
   - name: ci
   - name: bosh-windows
