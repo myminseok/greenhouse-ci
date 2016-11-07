@@ -4,7 +4,7 @@ image_resource:
   type: docker-image
   source:
     repository: ruby
-    tag : 'latest'
+    tag: 2.3.0
 inputs:
   - name: ci
   - name: bosh-windows
